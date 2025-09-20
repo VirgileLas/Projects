@@ -16,7 +16,6 @@ Chaque dossier correspond à un projet indépendant, avec son code source et par
   - Structures imbriquées  
   - Sauvegarde/restauration  
   - Affichage d’une carte dynamique  
-- Fichiers principaux : `JeuC.c`, `entites.h`, `stdprof.h`  
 
 ---
 
