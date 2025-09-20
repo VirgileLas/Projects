@@ -51,6 +51,7 @@ Utilisateurs --> Frontend React/Flutter --> API Node.js (Express) --> MySQL
 --------------------------------------------------------
 3. Structure du dépôt
 
+```text
 .
 ├── backend
 │   ├── __tests__ 
@@ -82,7 +83,7 @@ Utilisateurs --> Frontend React/Flutter --> API Node.js (Express) --> MySQL
 │   └── ...               (Fichiers pour l'app mobile)
 ├── README.txt            (Ce fichier, contient une documentation générale)
 └── ...
-
+```
 Chaque dossier contient un package.json avec ses propres dépendances et scripts NPM.
 
 --------------------------------------------------------
