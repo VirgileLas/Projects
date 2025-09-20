@@ -1,0 +1,207 @@
+# Guessle API – Documentation Backend
+
+## Table des matières
+
+1. Fonctionnalités principales
+2. Structure de la base de données (MySQL)
+3. Endpoints de l’API
+4. Authentification JWT
+5. Gestion des erreurs
+6. Remarques et flux d’utilisation
+
+---
+
+## 1. Fonctionnalités principales
+
+- **Inscription et connexion utilisateur (JWT, cookies httpOnly)**
+- **Création et gestion de parties**
+- **Gestion des types de jeu personnalisés (avec templates, images, data_schema)**
+- **Ajout de challenges (solutions à deviner)**
+- **Gestion des guesses (essais)**
+- **Leaderboard**
+- **Templates de jeu**
+- **Stockage sécurisé (hash bcrypt), vérification via JWT**
+- **Job automatique de reset quotidien des parties et guesses**
+- **Intégration Redis pour le cache des challenges quotidiens**
+
+---
+
+## 2. Structure de la base de données (MySQL)
+
+### `users`
+| Champ           | Type              | Description                            |
+|-----------------|-------------------|----------------------------------------|
+| id              | int, PK           | ID interne utilisateur                 |
+| username        | varchar(50), unique| Identifiant unique (clé étrangère ailleurs) |
+| email           | varchar(100), unique| Email unique                          |
+| password_hash   | varchar(255)      | Mot de passe haché (bcrypt)            |
+| games_played    | int, default 0    | Nombre de parties jouées               |
+| games_won       | int, default 0    | Nombre de parties gagnées              |
+| created_at      | timestamp         | Date de création du compte             |
+
+### `templates`
+| Champ        | Type               | Description                            |
+|--------------|--------------------|----------------------------------------|
+| id           | bigint, PK         | ID template                            |
+| name         | varchar(100), unique| Nom du template                       |
+| description  | text               | Description du template                |
+| type         | varchar(255)       | Type logique (ex: word_guess, char_guess)|
+
+### `game_types`
+| Champ           | Type                | Description                      |
+|-----------------|---------------------|----------------------------------|
+| id              | bigint, PK          | ID mode de jeu                   |
+| name            | varchar(100), unique| Nom du mode (unique)             |
+| template_id     | bigint, FK          | Référence vers `templates.id`    |
+| description     | text                | Description                      |
+| created_by      | varchar(100), FK    | Référence vers `users.username`  |
+| data_schema     | json                | Schéma de données dynamique      |
+| image           | mediumblob          | Image optionnelle du mode        |
+| number_of_guesses | int               | Nombre max d'essais              |
+| wordSize        | int                 | Taille des mots (optionnel)      |
+
+### `challenges`
+| Champ        | Type               | Description                    |
+|--------------|--------------------|-------------------------------|
+| id           | bigint, PK         | ID challenge                   |
+| game_type_id | bigint, FK         | Référence vers `game_types.id` |
+| data         | json               | Données spécifiques            |
+| solution     | varchar(255)       | Solution à deviner             |
+
+### `games`
+| Champ        | Type                   | Description                        |
+|--------------|------------------------|------------------------------------|
+| id           | bigint, PK             | ID partie                          |
+| status       | enum('in_progress', 'won', 'lost') | Statut (en cours/gagnée/perdue)   |
+| challenge_id | bigint, FK             | Référence vers `challenges.id`     |
+| username     | varchar(100), FK       | Référence vers `users.username`    |
+| game_type_id | bigint, FK             | Référence vers `game_types.id`     |
+| started_at   | timestamp              | Date de début                      |
+
+### `guesses`
+| Champ        | Type                   | Description                        |
+|--------------|------------------------|------------------------------------|
+| id           | bigint, PK             | ID guess                           |
+| game_id      | bigint, FK             | Référence vers `games.id`          |
+| guess        | varchar(255)           | La proposition                     |
+| guess_number | bigint                 | Numéro d’essai                     |
+
+**Relations :**  
+- Un utilisateur peut créer plusieurs parties, types de jeu, guesses.
+- Un template peut être utilisé par plusieurs game_types.
+- Un game_type a plusieurs challenges.
+- Une partie (game) est liée à un challenge (solution) et à un game_type.
+- Les guesses sont liées à une partie.
+
+---
+
+## 3. Endpoints de l’API
+
+### Authentification et utilisateur
+
+- `POST /signup`  
+  > Inscription.  
+  **Body:** `{ username, email, password }`  
+  **Réponse:** `{ success, token, user }`
+
+- `POST /login`  
+  > Connexion.  
+  **Body:** `{ username, password }`  
+  **Réponse:** `{ success, token, user }`
+
+- `POST /logout`  
+  > Déconnexion (suppression du cookie JWT).
+
+- `GET /auth`  
+  > Vérifie la validité du JWT, retourne l’utilisateur courant.
+
+- `GET /users/:username` (auth)  
+  > Récupère le profil d’un utilisateur.  
+  **Header:** `Authorization: Bearer <token>`
+
+- `PUT /users/:username` (auth)  
+  > Met à jour les stats du joueur (games_played, games_won).  
+  **Body:** `{ played_game, won_game }`
+
+---
+
+### Gestion des parties, challenges et guesses
+
+- `GET /challenge/:gameTypeId`  
+  > Récupère la solution du challenge du jour pour un mode donné (via Redis ou MySQL).  
+  **Param:** `gameTypeId`
+
+- `POST /guess/:gameTypeId/:username` (auth)  
+  > Fait une proposition sur la partie courante (joueur connecté).  
+  **Body:** `{ guess, guess_number }`
+
+- `POST /guess/:gameTypeId`  
+  > Fait une proposition (joueur non connecté).  
+  **Body:** `{ guess }`
+
+- `GET /restore/:gameTypeId/:username` (auth)  
+  > Récupère les guesses (essais) précédentes pour la partie en cours.
+
+---
+
+### Modes de jeu (game_types) et templates
+
+- `GET /game_types`  
+  > Liste tous les modes de jeu.
+
+- `POST /create_game_type/:templateId/:username` (auth, multipart)  
+  > Crée un nouveau mode à partir d’un template, d’un schéma, d’une image, etc.
+
+- `GET /game_type_info/:gameTypeId`  
+  > Récupère `wordSize` et `number_of_guesses` pour un mode de jeu.
+
+- `GET /template_info/:gameTypeId`  
+  > Récupère l’id de template associé à un mode de jeu.
+
+- `GET /templates`  
+  > Liste tous les templates de jeu.
+
+---
+
+### Challenges (solutions à deviner)
+
+- `GET /challenges/:gameTypeId`  
+  > Liste les challenges d’un mode de jeu.
+
+- `POST /add_challenges/:gameTypeId` (auth, multipart)  
+  > Ajoute des challenges pour un mode (data, solutions, schéma vérifié dynamiquement).
+
+---
+
+### Leaderboard
+
+- `GET /leaderboard`  
+  > Top 50 utilisateurs par parties gagnées et jouées.
+
+---
+
+## 4. Authentification JWT
+
+- Utilise JWT (cookie httpOnly ou Authorization header).
+- **Protection** : seules les routes qui modifient des données ou accèdent à des infos sensibles nécessitent le token (middleware `authenticateToken`).
+- Token généré à la connexion/inscription, stocké côté client en cookie httpOnly.
+
+---
+
+## 5. Gestion des erreurs
+
+- Toutes les erreurs retournent `{ success: false, message: <erreur> }` avec un code HTTP explicite (400, 401, 403, 404, 500, etc.).
+- Succès : `{ success: true, ... }`
+
+---
+
+## 6. Particularités et flux recommandés
+
+- **Reset quotidien** (cron) : chaque nuit, la table des parties (`games`, `guesses`) et le cache Redis sont réinitialisés (éviter les problèmes, suivre la logique du jeu type wordle).
+- **Redis** : stocke la solution et les data du challenge du jour pour chaque mode, accélérant l’accès et évitant les querry SQL répétitives.
+- **Gestion des images** : upload image pour chaque game_type possible (stockée en BLOB).
+- **Schéma de challenge flexible** : le champ `data_schema` des game_types permet de gérer différents types de jeux sans modification du code backend.
+
+---
+
+# FIN
