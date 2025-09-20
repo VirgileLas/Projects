@@ -1,21 +1,58 @@
-# Project Informatique
+# Portfolio Informatique — Projets Étudiants et Personnels
 
-Bienvenue sur mon portfolio GitHub !
-Ce dépôt regroupe différents projets que j’ai réalisés en informatique, dans plusieurs langages et domaines.
+Bienvenue sur mon dépôt GitHub !   
+Ce dépôt regroupe différents projets réalisés dans le cadre de mes études et de mes expérimentations personnelles.  
+Chaque dossier correspond à un projet indépendant, avec son code source et parfois un fichier README associé.
 
 ---
 
-📂 Structure des projets
+## 📂 Projets inclus
 
-- Jeu interactif C:
-  Projet en langage C avec un jeu interactif basé sur la console.  
+### 🔹 Jeu de survie textuel (C)
+- Jeu textuel dans lequel le joueur incarne **Rahan**, évoluant sur une carte dynamique peuplée de monstres, nourritures et objets.  
+- Commandes utilisateur pour se déplacer, explorer et survivre.  
+- Objectifs pédagogiques :
+  - Gestion de la mémoire dynamique (`malloc`, `free`)  
+  - Structures imbriquées  
+  - Sauvegarde/restauration  
+  - Affichage d’une carte dynamique  
+- Fichiers principaux : `JeuC.c`, `entites.h`, `stdprof.h`  
 
-- Jeux JAVA :
-  Projets réalisés en Java 
+---
 
-- Serveur:
-  Projet lié au développement d’un serveur en Pyhton . Gestion des cookies, ping, heartbeat avec sauvegarde dans fichier state,
-  reconnection possible au serveur, relancement des termianux log et fifo si éteints, gestion quand on lance la partie avec !start
-   .
--
+### 🔹 Jeux Java
+- Exercices et mini-projets réalisés en **Java**.  
+- Exemple : Gestion et création d’un petit jeu orienté objet.  
+- Objectifs pédagogiques :
+  - Programmation orientée objet (classes, héritage)  
+  - Organisation d’un projet en Java  
 
+---
+
+### 🔹 Serveur
+- Projet axé sur la programmation réseau.  
+- Objectifs pédagogiques :
+  - Développement backend simple  
+  - Gestion de connexions clientes  
+  - Bases de la communication client-serveur  
+
+---
+
+### 🔹 Projet Fullstack (Backend + Frontend Web + Mobile)
+Application complète composée de plusieurs modules :
+- **Backend** (Node.js, Express) :
+  - API connectée à MySQL et Redis  
+  - Gestion des comparateurs, des entités et de la logique métier  
+  - Tests avec Jest  
+
+- **Database** :
+  - Structure de la base expliquée dans un README  
+  - Scripts SQL  
+
+- **Frontend Web** (React) :
+  - Pages et composants React  
+  - Assets publics (images, fichiers statiques)  
+
+- **Frontend Mobile App** :
+  - Application mobile dédiée  
+  - Documentation spécifique incluse  
