@@ -1,8 +1,7 @@
-Nom: Cazacu Ion
-Binôme: Cazacu Ion, Virgile Lassagne
+Nom: Virgile Lassagne
 Mon rôle: Client
 Points qu'on a amélioré entre la démo et le rendu: Gestion des cookies, ping, heartbeat avec sauvegarde dans fichier state, reconnection possible au serveur, relancement des termianux log et fifo si éteints, gestion quand on lance la partie avec !start (si crash serveur après !start, on ne laisse pas les personnes qui n'étaient pas dans la partie se connecter lors du relancement dus erveur par exemple etc.)
-Points sur lesquels on est restés bloqués: Aucun vraiment. On a éssayé de gérer tous les cas possibles qui pourraient conduire à des bugs ou des comportements non normaux mais il est surêment possible d'en trouver un si on creuse.
+Points sur lesquels on est restés bloqués: Aucun vraiment. On a éssayé de gérer tous les cas possibles qui pourraient conduire à des bugs ou des comportements non normaux.
 Auto-évaluation: Côte client et serveur tout a été fait. On a beaucoup debug mais encore une fois one st jamais à l'abri d'une surprise.
 
 Commentaires:
