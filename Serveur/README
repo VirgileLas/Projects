@@ -1,0 +1,13 @@
+Nom: Cazacu Ion
+Binôme: Cazacu Ion, Virgile Lassagne
+Mon rôle: Client
+Points qu'on a amélioré entre la démo et le rendu: Gestion des cookies, ping, heartbeat avec sauvegarde dans fichier state, reconnection possible au serveur, relancement des termianux log et fifo si éteints, gestion quand on lance la partie avec !start (si crash serveur après !start, on ne laisse pas les personnes qui n'étaient pas dans la partie se connecter lors du relancement dus erveur par exemple etc.)
+Points sur lesquels on est restés bloqués: Aucun vraiment. On a éssayé de gérer tous les cas possibles qui pourraient conduire à des bugs ou des comportements non normaux mais il est surêment possible d'en trouver un si on creuse.
+Auto-évaluation: Côte client et serveur tout a été fait. On a beaucoup debug mais encore une fois one st jamais à l'abri d'une surprise.
+
+Commentaires:
+On a rajouté une commande !!exit pour l'admin qui servirait à 'correctement' éteindre le serveur et la partie ou le chat en cours et donc videra le fichier state et de même enverra un message aux personnes connectées pour vider le fichier cookie.
+On ne recommande pas d'essayer une connexion multiple depuis le même ordi, donc lancer 2 clients ou plus sur le même ordi vers le même serveur car de toute façon il sera impossible d'avoir 2 clients différents à cause du cookie et car ça risque de créer quelques comportements invoulus.
+
+Versions:
+Il ya un seule version et elle est stable et comme précisé, elle devrait tout faire du baréme binôme.
