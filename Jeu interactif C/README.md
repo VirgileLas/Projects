@@ -1,25 +1,36 @@
-# Jeu de survie textuel — Projet C
+Jeu de survie textuel — Projet C
 
-Ce projet est un jeu textuel en C dans lequel vous incarnez **Rahan**, un personnage évoluant sur une carte dynamique peuplée de monstres, de nourritures, d’objets et d’obstacles. L’univers est basé sur des commandes que vous entrez pour déplacer Rahan, explorer la carte, et survivre dans ce monde en expansion.
+Ce projet est un jeu textuel en C dans lequel le joueur incarne Rahan, un personnage qui évolue sur une carte dynamique peuplée de monstres, de nourritures, d’objets et d’obstacles. Le jeu repose sur des commandes saisies par l’utilisateur pour déplacer Rahan, explorer la carte et tenter de survivre.
 
-## Contenu
+Contenu du projet :
 
-- `JeuC.c` : fichier principal contenant la logique du jeu.
-- `entites.h`, `stdprof.h` : en-têtes (headers) nécessaires au bon fonctionnement du jeu (non fournis ici, en cours de récupération).
-- Structures utilisées :
-  - `entite`, `rahan`, `objet`, `monstre`, `nourriture`, etc.
+JeuC.c : fichier principal avec la logique du jeu
 
-## Objectifs pédagogiques
+entites.h, stdprof.h : fichiers en-têtes nécessaires (en cours de récupération)
 
-- Manipulation de la mémoire dynamique (`malloc`, `free`)
-- Gestion de structures imbriquées
-- Traitement de commandes utilisateur (mode interactif ou fichier)
-- Système de sauvegarde/restauration via mémoire statique
-- Affichage dynamique d’une carte à coordonnées étendues
+Structures utilisées : entite, rahan, objet, monstre, nourriture, etc.
 
-##Compilation
+Objectifs pédagogiques :
 
-Compile avec GCC (ou autre compilateur C compatible POSIX) :
+Utilisation de la mémoire dynamique (malloc, free)
+
+Gestion de structures imbriquées
+
+Traitement de commandes utilisateur (mode interactif ou fichier)
+
+Mise en place d’un système de sauvegarde et restauration avec mémoire statique
+
+Affichage dynamique d’une carte avec coordonnées étendues
+
+Compilation :
+Compiler avec gcc ou un autre compilateur C compatible POSIX :
+gcc -o jeu JeuC.c -Wall
+
+Exécution :
+
+Mode interactif : ./jeu
+
+Avec un fichier de commandes : ./jeu commandes.txt
 
 ```bash
 gcc -o jeu JeuC.c -Wall
