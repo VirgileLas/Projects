@@ -249,7 +249,7 @@ npm test
 --------------------------------------------------------
 ANNEXE : To do & améliorations possibles
 
-- Ajout d’un frontend Flutter/mobile complet
+- Amélioration de UI/UX 
 - Commenter le code
 - Repenser la logique du frontend potentiellement pour le rendre plus propre
 
